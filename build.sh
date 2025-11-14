@@ -16,7 +16,7 @@ platypus \
   --interface-type 'None' \
   --app-icon Camera_31090.icns \
   --interpreter /usr/bin/perl \
-  --app-version 1.0.0 \
+  --app-version 1.1.0 \
   --author "Beat Rubischon" \
   --bundled-file Credits.rtf \
   --bundled-file Pictures \

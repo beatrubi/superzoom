@@ -2,7 +2,7 @@
 #
 # Display the picture of the day
 #
-# Version 1.0.0 (C) 9.2024 by Beat Rubischon <beat@0x1b.ch>
+# Version 1.1.0 (C) 9.2024 by Beat Rubischon <beat@0x1b.ch>
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -15,6 +15,7 @@
 #
 use strict;
 use warnings;
+use POSIX qw(uname);
 use Cwd qw(cwd);
 use File::Copy;
 
@@ -429,11 +430,19 @@ while(1) {
       print LOG ", image: $mmdd";
     }
     unlink $ENV{'HOME'}."/Pictures/Wallpaper.jpeg";
-#    symlink cwd()."/Pictures/".$pic{$mmdd},
-#      $ENV{'HOME'}."/Pictures/Wallpaper.jpeg";
     copy(cwd()."/Pictures/".$pic{$mmdd},
       $ENV{'HOME'}."/Pictures/Wallpaper.jpeg");
-    system "killall Dock";
+
+    my @uname=uname();
+    my $major=$uname[2];
+    $major=~s/\..*$//;
+    if ($major < 23) {
+      # pre Sonoma aka macOS 14 aka Darwin 23
+      system "killall Dock";
+    } else {
+      # Sonoma and later
+      system "killall WallpaperAgent";
+    }
   }
 
   # take a nap until tomorrow
